@@ -5,7 +5,15 @@ import { Injectable } from '@angular/core';
 export class RandomColorService {
   private _randomColor = randomColor;
 
-  public getRandomHexColor(options?: any) {
-    return randomColor(options);
+  public getRandomHexColor() {
+    return randomColor();
+  }
+
+  public getRandomLightColor() {
+    return randomColor({ luminosity: 'light' });
+  }
+
+  public getRandomDarkColor() {
+    return randomColor({ luminosity: 'dark' });
   }
 }

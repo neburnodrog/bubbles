@@ -45,7 +45,6 @@ export class CircleComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('circle.ngOnInit', 'color: ' + this.color);
     this.style.next({
       height: this.radius.toString() + 'px',
       width: this.radius.toString() + 'px',
@@ -81,7 +80,6 @@ export class CircleComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('circle.ngOnDestroy');
     window.clearTimeout(this.timeOut);
   }
 }

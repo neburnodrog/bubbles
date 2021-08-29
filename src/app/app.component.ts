@@ -8,31 +8,28 @@ import {
 } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { ɵBrowserAnimationFactory } from '@angular/platform-browser/animations';
-import { fromEvent, interval, Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { SubSink } from 'subsink';
 import { CircleComponent } from './components/circle/circle.component';
+import { AnimationService } from './services/animationService';
 import { RandomColorService } from './services/randomColorService';
+import { WindowDimensionsService } from './services/windowDimensionsService';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   private subs = new SubSink();
-  winWidth = window.innerWidth;
-  winHeight = window.innerHeight;
 
   @ViewChild('circleContainer', { read: ViewContainerRef })
   container!: ViewContainerRef;
 
-  @ViewChild('greeting') greeting!: ElementRef<HTMLHeadingElement>;
+  @ViewChild('greeting') greeting!: ElementRef<HTMLDivElement>;
 
   circleFactory!: ComponentFactory<CircleComponent>;
   circleRefArray: ComponentRef<CircleComponent>[] = [];
-
-  title = 'pop the circles';
 
   windowResizeSubscription!: Subscription;
   createCirclesSub?: Subscription;
@@ -43,46 +40,42 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private resolver: ComponentFactoryResolver,
     private randomColorService: RandomColorService,
-    private el: ElementRef
+    private el: ElementRef,
+    private animationService: AnimationService,
+    private winService: WindowDimensionsService
   ) {}
 
-  ngOnInit() {
-    console.log('app onInit');
-    this.windowResizeSubscription = fromEvent(window, 'resize').subscribe(
-      (event: Event) => {
-        console.log('window resized');
-        const window = event.target as Window;
-        this.winWidth = window.innerWidth;
-        this.winHeight = window.innerHeight;
-      }
-    );
-  }
-
   ngAfterViewInit() {
-    console.log('app afterViewInit');
     this.circleFactory = this.resolver.resolveComponentFactory(CircleComponent);
     const body = this.el.nativeElement.parentNode;
-    console.log(body);
     this.animateBackground(body);
+    // this.moveTitle();
   }
 
   animateBackground(body: HTMLBodyElement) {
-    const backgroundAnimation = [
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-      { backgroundColor: this.randomColorService.getRandomHexColor() },
-    ];
-
-    body.animate(backgroundAnimation, {
+    const bodyFrames = this.animationService.getBodyFrames();
+    body.animate(bodyFrames, {
       duration: 10000,
       iterations: Infinity,
     });
   }
 
-  moveTitle() {}
+  // moveTitle() {
+  //   const initialPosition = {
+  //     x: this.greeting.nativeElement.offsetWidth,
+  //     y: this.greeting.nativeElement.offsetHeight,
+  //   };
+  //   const titleAnimationKeyFrames =
+  //     this.animationService.getTitleAnimationFrames(initialPosition);
+
+  //   console.log({ titleAnimationKeyFrames });
+
+  //   this.greeting.nativeElement.animate(titleAnimationKeyFrames, {
+  //     duration: 30000,
+  //     iterations: Infinity,
+  //     easing: 'ease-in',
+  //   });
+  // }
 
   start() {
     this.started = true;
@@ -105,8 +98,8 @@ export class AppComponent implements OnInit, OnDestroy {
       const circleColor = this.randomColorService.getRandomHexColor();
       const circleRadius = Math.random() * 200;
       const circlePosition = {
-        x: Math.round(Math.random() * (this.winWidth - circleRadius)),
-        y: Math.round(Math.random() * (this.winHeight - circleRadius)),
+        x: Math.round(Math.random() * (this.winService.width - circleRadius)),
+        y: Math.round(Math.random() * (this.winService.height - circleRadius)),
       };
 
       circle.instance.color = circleColor;
