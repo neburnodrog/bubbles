@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SubSink } from 'subsink';
 
@@ -26,6 +34,8 @@ export class CircleComponent implements OnInit {
 
   isAlive = new BehaviorSubject<boolean>(true);
   timeOut!: number;
+
+  @Output() clicked = new EventEmitter<boolean>();
 
   @ViewChild('circle') circle!: ElementRef<HTMLDivElement>;
 
@@ -72,10 +82,14 @@ export class CircleComponent implements OnInit {
       },
     ];
 
-    this.circle.nativeElement.animate(disappear, this.life);
+    this.circle.nativeElement.animate(disappear, {
+      duration: this.life,
+      easing: 'ease-in',
+    });
   }
 
   onClick() {
+    this.clicked.emit(true);
     this.isAlive.next(false);
   }
 

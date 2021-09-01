@@ -2,8 +2,9 @@
   Stop
 </button>
 <div *ngIf="!started" #greeting class="title">
-  <h1>Hi there! I'm Ruben Karlsson</h1>
+  <h1 #title>Burbujas</h1>
   <h3>Press start to play the game</h3>
   <button mat-flat-button color="primary" (click)="start()">Start</button>
 </div>
 <div #circleContainer></div>
+<h4 *ngIf="started" class="score">Score: {{ points }}</h4>

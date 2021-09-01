@@ -2,14 +2,16 @@
   "name": "bubbles",
   "version": "0.0.0",
   "engines": {
-    "node": "14.15.3"
+    "node": "14.15.3",
+    "npm": "7.21.0"
   },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {

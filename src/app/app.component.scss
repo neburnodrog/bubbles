@@ -5,7 +5,28 @@
     font-weight: 600;
   }
 
+  h1 {
+    font-size: 3rem;
+    // text-decoration: underline;
+  }
+
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rem;
+
   text-align: center;
   position: absolute;
-  transform: translate3D(50vw, 50vh, 0);
+
+  overflow: hidden;
+}
+
+.score {
+  position: absolute;
+  right: 25px;
+  top: 0;
 }

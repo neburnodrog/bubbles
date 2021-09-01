@@ -26,7 +26,8 @@ export class AppComponent {
   @ViewChild('circleContainer', { read: ViewContainerRef })
   container!: ViewContainerRef;
 
-  @ViewChild('greeting') greeting!: ElementRef<HTMLDivElement>;
+  @ViewChild('greeting') greetingBubble!: ElementRef<HTMLDivElement>;
+  @ViewChild('title') title!: ElementRef<HTMLHeadingElement>;
 
   circleFactory!: ComponentFactory<CircleComponent>;
   circleRefArray: ComponentRef<CircleComponent>[] = [];
@@ -49,7 +50,8 @@ export class AppComponent {
     this.circleFactory = this.resolver.resolveComponentFactory(CircleComponent);
     const body = this.el.nativeElement.parentNode;
     this.animateBackground(body);
-    // this.moveTitle();
+    this.greetingBubbleColor();
+    this.separateLetterOfTitle();
   }
 
   animateBackground(body: HTMLBodyElement) {
@@ -60,22 +62,30 @@ export class AppComponent {
     });
   }
 
-  // moveTitle() {
-  //   const initialPosition = {
-  //     x: this.greeting.nativeElement.offsetWidth,
-  //     y: this.greeting.nativeElement.offsetHeight,
-  //   };
-  //   const titleAnimationKeyFrames =
-  //     this.animationService.getTitleAnimationFrames(initialPosition);
+  greetingBubbleColor() {
+    const initialPosition = {
+      x: this.winService.width / 3.5,
+      y: this.winService.height / 5,
+    };
 
-  //   console.log({ titleAnimationKeyFrames });
+    const titleAnimationKeyFrames =
+      this.animationService.getTitleDivAnimationFrames(initialPosition);
 
-  //   this.greeting.nativeElement.animate(titleAnimationKeyFrames, {
-  //     duration: 30000,
-  //     iterations: Infinity,
-  //     easing: 'ease-in',
-  //   });
-  // }
+    this.greetingBubble.nativeElement.animate(titleAnimationKeyFrames, {
+      duration: 30000,
+      iterations: Infinity,
+      easing: 'ease-in',
+    });
+  }
+
+  separateLetterOfTitle() {
+    const letterFrames = this.animationService.getTitleLetterSeparate();
+    this.title.nativeElement.animate(letterFrames, {
+      duration: 3000,
+      iterations: Infinity,
+      easing: 'linear',
+    });
+  }
 
   start() {
     this.started = true;
@@ -88,6 +98,10 @@ export class AppComponent {
   stop() {
     this.started = false;
     this.createCirclesSub?.unsubscribe();
+    window.setTimeout(() => {
+      this.greetingBubbleColor();
+      this.separateLetterOfTitle();
+    });
   }
 
   createCircles() {
@@ -96,7 +110,7 @@ export class AppComponent {
 
       const circleLife = Math.random() * 5 * 1000 + 5000;
       const circleColor = this.randomColorService.getRandomHexColor();
-      const circleRadius = Math.random() * 200;
+      const circleRadius = Math.random() * 300;
       const circlePosition = {
         x: Math.round(Math.random() * (this.winService.width - circleRadius)),
         y: Math.round(Math.random() * (this.winService.height - circleRadius)),
@@ -109,6 +123,10 @@ export class AppComponent {
 
       this.circleRefArray.push(circle);
       const index = this.circleRefArray.length - 1;
+
+      this.subs.sink = circle.instance.clicked.subscribe((clicked) => {
+        if (clicked) this.points += 100;
+      });
 
       this.subs.sink = circle.instance.isAlive.subscribe((isAlive) => {
         if (!isAlive) {

@@ -9,42 +9,56 @@ export class AnimationService {
     private winService: WindowDimensionsService
   ) {}
 
-  getTitleAnimationFrames(initialPosition: { x: number; y: number }) {
-    const initialColor = this.randomColorService.getRandomDarkColor();
+  getTitleDivAnimationFrames(initialPosition: any) {
+    const initialColor = this.randomColorService.getRandomLightColor();
 
-    let titleFrames: { color: string; transform?: string }[] = [
-      { transform: this.getTranslation(initialPosition), color: initialColor },
+    let titleFrames: any = [
+      {
+        transform: this.getTranslation(initialPosition),
+        backgroundColor: initialColor,
+      },
     ];
 
     for (let i = 0; i < 10; i++) {
       titleFrames = titleFrames.concat([
         {
-          color: this.randomColorService.getRandomDarkColor(),
-        },
-        {
-          color: this.randomColorService.getRandomDarkColor(),
-        },
-        {
           transform: this.getTranslation(),
-          color: this.randomColorService.getRandomDarkColor(),
+          backgroundColor: this.randomColorService.getRandomLightColor(),
         },
       ]);
     }
 
     titleFrames.push({
       transform: this.getTranslation(initialPosition),
-      color: initialColor,
+      backgroundColor: initialColor,
     });
+    // const titleFrames = [
+    //   { backgroundColor: initialColor },
+    //   { backgroundColor: this.randomColorService.getRandomDarkColor() },
+    //   { backgroundColor: this.randomColorService.getRandomDarkColor() },
+    //   { backgroundColor: this.randomColorService.getRandomDarkColor() },
+    //   { backgroundColor: this.randomColorService.getRandomDarkColor() },
+    //   { backgroundColor: this.randomColorService.getRandomDarkColor() },
+    //   { backgroundColor: initialColor },
+    // ];
 
     return titleFrames;
+  }
+
+  getTitleLetterSeparate() {
+    return [
+      { letterSpacing: '0.1px', fontSize: '3rem' },
+      { letterSpacing: '10px', fontSize: '3.5rem' },
+      { letterSpacing: '0.1px', fontSize: '3rem' },
+    ];
   }
 
   getTranslation(initialPosition?: { x: number; y: number }) {
     if (initialPosition) {
       return `
         translate3D(
-          ${initialPosition.x},
-          ${initialPosition.y},
+          ${initialPosition.x}px,
+          ${initialPosition.y}px,
           0
         )
       `;
@@ -53,11 +67,11 @@ export class AnimationService {
     return `translate3D(
       ${
         Math.round((Math.random() * this.winService.width) / 8) +
-        (8 / 16) * this.winService.width
+        (4 / 16) * this.winService.width
       }px,
       ${
         Math.round((Math.random() * this.winService.height) / 8) +
-        (8 / 16) * this.winService.height
+        (4 / 16) * this.winService.height
       }px,
       0
     )`;
