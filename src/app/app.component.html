@@ -3,7 +3,11 @@
 </button>
 <div *ngIf="!started" #greeting class="title">
   <h1 #title>Burbujas</h1>
-  <h3>Press start to play the game</h3>
+  <h3>
+    Press start to play the game
+    <mat-icon (click)="onInfoClick()">info</mat-icon>
+  </h3>
+
   <button mat-flat-button color="primary" (click)="start()">Start</button>
 </div>
 <div #circleContainer></div>

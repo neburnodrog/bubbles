@@ -137,6 +137,12 @@ export class AppComponent {
     });
   }
 
+  onInfoClick() {
+    confirm(
+      'Just click on the bubbles to pop them and see how you score grows.'
+    );
+  }
+
   ngOnDestroy() {
     this.subs.unsubscribe();
     this.windowResizeSubscription.unsubscribe();
