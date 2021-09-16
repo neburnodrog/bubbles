@@ -1,0 +1,48 @@
+mat-card {
+  opacity: 0.8;
+
+  .cardContentContainer {
+    width: 80%;
+    margin: auto;
+
+    .freqContainer {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-style: italic;
+      }
+
+      #freq {
+        width: 100%;
+      }
+    }
+
+    .secondLine {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .radioContainer {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .volumeContainer {
+        display: flex;
+
+        label {
+          margin-right: 1rem;
+        }
+      }
+    }
+
+    mat-radio-button {
+      margin-left: 1rem;
+    }
+
+    button {
+      margin-right: 1rem;
+    }
+  }
+}

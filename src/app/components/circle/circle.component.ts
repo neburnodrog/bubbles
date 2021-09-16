@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BubbleSoundService } from 'src/app/services/bubbleSound.service';
 import { SubSink } from 'subsink';
 
 type CircleStyle = {
@@ -25,6 +26,7 @@ type CircleStyle = {
   selector: 'app-circle',
   templateUrl: './circle.component.html',
   styleUrls: ['./circle.component.scss'],
+  providers: [BubbleSoundService],
 })
 export class CircleComponent implements OnInit {
   @Input() radius!: number;
@@ -52,7 +54,7 @@ export class CircleComponent implements OnInit {
 
   private subs = new SubSink();
 
-  constructor() {}
+  constructor(private bubbleSoundService: BubbleSoundService) {}
 
   ngOnInit(): void {
     this.style.next({
@@ -66,8 +68,12 @@ export class CircleComponent implements OnInit {
     });
 
     this.timeOut = window.setTimeout(() => {
+      // this.bubbleSoundService.stopSound();
       this.isAlive.next(false);
     }, this.life);
+
+    this.bubbleSoundService.configureSound(this.radius, this.color);
+    // modify initial sound based on input variables;
   }
 
   ngAfterViewInit() {

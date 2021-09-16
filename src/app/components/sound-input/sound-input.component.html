@@ -1,0 +1,68 @@
+<mat-card>
+  <div class="cardContentContainer">
+    <div class="freqContainer">
+      <label for="freq">Frequency: {{ frequency }}</label>
+      <input
+        type="range"
+        name="freq"
+        id="freq"
+        [(ngModel)]="frequency"
+        min="110"
+        max="1720"
+        step="0.01"
+        (input)="setFrequency()"
+      />
+    </div>
+
+    <div class="secondLine">
+      <div class="radioContainer">
+        <label id="example-radio-group-label">Pick Wave Form: </label>
+        <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+          (change)="onWaveFormChange($event)"
+        >
+          <mat-radio-button
+            class="example-radio-button"
+            *ngFor="let waveType of waveOptions"
+            [value]="waveType"
+            [checked]="waveType === waveTypeChosen"
+          >
+            {{ waveType }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="volumeContainer">
+        <label for="volume">Volume: </label>
+        <input
+          type="range"
+          name="volume"
+          id="volume"
+          max="100"
+          min="0"
+          value="50"
+          step="1"
+          [ngModel]="volume"
+          (ngModelChange)="onVolumeChange($event)"
+        />
+      </div>
+    </div>
+
+    <div class="buttonsContainer">
+      <button mat-raised-button color="primary" (click)="startSound()">
+        Start
+      </button>
+      <button mat-raised-button color="accent" (click)="stopSound()">
+        Stop
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        class="delete"
+        (click)="onDelete()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-card>

@@ -3,16 +3,19 @@ import { fromEvent, Subscription } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WindowDimensionsService {
-  height = window.innerHeight;
-  width = window.innerWidth;
+  height!: number;
+  width!: number;
   windowResizeSubscription?: Subscription;
 
   constructor() {
+    this.height = window.innerHeight;
+    this.width = window.innerWidth;
+
     this.windowResizeSubscription = fromEvent(window, 'resize').subscribe(
       (event: Event) => {
         const window = event.target as Window;
-        this.height = window.innerWidth;
-        this.width = window.innerHeight;
+        this.height = window.innerHeight;
+        this.width = window.innerWidth;
       }
     );
   }

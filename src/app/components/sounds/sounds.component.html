@@ -1,0 +1,12 @@
+<div
+  class="audioInputContainer"
+  *ngFor="let input of inputFields; let i = index"
+>
+  <app-sound-input index="i" (delete)="onDelete($event)"></app-sound-input>
+</div>
+
+<div class="buttonsContainer">
+  <button mat-raised-button color="primary" (click)="onAddInput()">
+    Add Input Field
+  </button>
+</div>
