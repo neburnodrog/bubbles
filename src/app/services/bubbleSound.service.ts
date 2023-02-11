@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WebAudio } from './webAudio.service';
+import { WebAudio } from './web-audio.service';
 
 @Injectable()
 export class BubbleSoundService {

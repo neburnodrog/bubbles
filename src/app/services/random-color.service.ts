@@ -1,10 +1,10 @@
 import randomColor from 'randomcolor';
 import { Injectable } from '@angular/core';
-import { colors } from './colors';
+import { COLORS } from '../constants/colors';
 
 @Injectable({ providedIn: 'root' })
 export class RandomColorService {
-  private colors = colors;
+  private colors = COLORS;
 
   public getRandomSematicColor() {
     const length = this.colors.length;

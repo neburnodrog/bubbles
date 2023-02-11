@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RandomColorService } from './randomColorService';
+import { RandomColorService } from './random-color.service';
 import { WindowDimensionsService } from './windowDimensionsService';
 
 @Injectable({ providedIn: 'root' })

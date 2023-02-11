@@ -13,8 +13,8 @@ import {
 import { interval, Subscription } from 'rxjs';
 import { SubSink } from 'subsink';
 import { CircleComponent } from '../circle/circle.component';
-import { AnimationService } from '../../services/animationService';
-import { RandomColorService } from '../../services/randomColorService';
+import { AnimationService } from '../../services/animation.service';
+import { RandomColorService } from '../../services/random-color.service';
 import { WindowDimensionsService } from '../../services/windowDimensionsService';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { AnimationService } from './services/animationService';
+import { AnimationService } from './services/animation.service';
 
 @Component({
   selector: 'app-root',

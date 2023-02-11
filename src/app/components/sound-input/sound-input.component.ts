@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
-import { WebAudio } from 'src/app/services/webAudio.service';
+import { WebAudio } from 'src/app/services/web-audio.service';
 
 @Component({
   selector: 'app-sound-input',
