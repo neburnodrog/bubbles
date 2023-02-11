@@ -68,7 +68,7 @@ export class CircleComponent implements OnInit {
       this.isAlive.next(false);
     }, this.life);
 
-    this.bubbleSoundService.configureSound(this.radius, this.color);
+    this.bubbleSoundService.configureSound(this.radius, this.color, this.life);
     // modify initial sound based on input variables;
   }
 

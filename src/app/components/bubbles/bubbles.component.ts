@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { Subscription, interval } from 'rxjs';
 import { SubSink } from 'subsink';
 import { AnimationService } from '../../services/animation.service';
@@ -21,7 +22,13 @@ import { CircleComponent } from '../circle/circle.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, CircleComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    CircleComponent,
+  ],
   selector: 'app-bubbles',
   templateUrl: './bubbles.component.html',
   styleUrls: ['./bubbles.component.scss'],
@@ -99,14 +106,10 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   createCircles() {
-    this.createCirclesSub = interval(300).subscribe(() => {
+    this.createCirclesSub = interval(500).subscribe(() => {
       const circle = this.container.createComponent(CircleComponent);
 
       const circleRadius = Math.floor(Math.random() * 300);
-      console.log(
-        '🚀 ~ file: bubbles.component.ts:106 ~ BubblesComponent ~ this.createCirclesSub=interval ~ circleRadius',
-        circleRadius
-      );
 
       circle.instance.life = this.randomLifeService.randomLife();
       circle.instance.radius = circleRadius;

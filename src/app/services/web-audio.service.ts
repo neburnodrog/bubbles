@@ -31,13 +31,13 @@ export class WebAudio {
     return gain;
   }
 
-  startSound(osc: OscillatorNode) {
-    osc.connect(this.gainNode);
-    osc.start(0);
+  startSound(oscillator: OscillatorNode) {
+    oscillator.connect(this.gainNode);
+    oscillator.start(0);
   }
 
-  stopSound(osc: OscillatorNode) {
-    osc.stop(0);
+  stopSound(oscillator: OscillatorNode) {
+    oscillator.stop(0);
   }
 
   changeVolume(value: number) {
@@ -45,13 +45,7 @@ export class WebAudio {
     this.gainNode.gain.value = volume;
   }
 
-  createCompressor() {
-    const compressor = this.context.createDynamicsCompressor();
-    compressor.threshold.setValueAtTime(-50, this.context.currentTime);
-    compressor.knee.setValueAtTime(40, this.context.currentTime);
-    compressor.ratio.setValueAtTime(12, this.context.currentTime);
-    compressor.attack.setValueAtTime(0, this.context.currentTime);
-    compressor.release.setValueAtTime(0.25, this.context.currentTime);
-    return compressor;
+  createCompressor(time: number) {
+    return this.context.createDynamicsCompressor();
   }
 }
