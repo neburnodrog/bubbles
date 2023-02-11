@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -8,24 +9,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BubbleSoundService } from 'src/app/services/bubbleSound.service';
+import { BubbleSoundService } from 'src/app/services/bubble-sound.service';
 import { SubSink } from 'subsink';
-
-type CircleStyle = {
-  backgroundColor?: string;
-  borderRadius?: string;
-  height?: string;
-  width?: string;
-  position?: string;
-  left?: string;
-  top?: string;
-  transition?: string;
-};
+import { CircleStyle } from '../../model/circle.interface';
+import { SamplesService } from '../../services/samples.service';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-circle',
   templateUrl: './circle.component.html',
-  styleUrls: ['./circle.component.scss'],
   providers: [BubbleSoundService],
 })
 export class CircleComponent implements OnInit {
@@ -54,7 +47,10 @@ export class CircleComponent implements OnInit {
 
   private subs = new SubSink();
 
-  constructor(private bubbleSoundService: BubbleSoundService) {}
+  constructor(
+    private bubbleSoundService: BubbleSoundService,
+    private sampleService: SamplesService
+  ) {}
 
   ngOnInit(): void {
     this.style.next({
@@ -96,6 +92,8 @@ export class CircleComponent implements OnInit {
 
   onClick() {
     this.clicked.emit(true);
+    this.sampleService.playSound();
+    this.bubbleSoundService.stopSound();
     this.isAlive.next(false);
   }
 

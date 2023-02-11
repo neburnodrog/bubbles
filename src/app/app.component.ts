@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { AnimationService } from './services/animation.service';
 
 @Component({
+  imports: [RouterOutlet],
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   constructor(

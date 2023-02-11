@@ -1,0 +1,10 @@
+{
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.sortImports": true,
+    "source.organizeImports": true
+  },
+  "editor.foldingImportsByDefault": true
+}

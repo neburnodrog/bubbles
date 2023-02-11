@@ -13,10 +13,13 @@ export class BubbleSoundService {
 
   configureSound(radius: number, color: string) {
     const currentTime = this.webAudio.getTime();
-    this.sound.frequency.value = radius * 2;
+    this.sound.frequency.value = (50 / radius) * 500;
+    this.gain.gain.linearRampToValueAtTime(0.2, currentTime + 0.1);
+    this.gain.gain.linearRampToValueAtTime(0.4, currentTime + 0.2);
+    this.gain.gain.linearRampToValueAtTime(0, currentTime + 0.5);
     this.sound.connect(this.gain);
     this.sound.start(currentTime);
-    this.sound.stop(currentTime + 0.2);
+    this.sound.stop(currentTime + 0.5);
   }
 
   stopSound() {

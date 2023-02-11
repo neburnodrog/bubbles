@@ -1,8 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyRadioChange as MatRadioChange } from '@angular/material/legacy-radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { WebAudio } from 'src/app/services/web-audio.service';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatRadioModule,
+    MatCardModule,
+    MatIconModule,
+    FormsModule,
+  ],
   selector: 'app-sound-input',
   templateUrl: './sound-input.component.html',
   styleUrls: ['./sound-input.component.scss'],

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RandomColorService } from './random-color.service';
-import { WindowDimensionsService } from './windowDimensionsService';
+import { WindowDimensionsService } from './window-dimensions.service';
 
 @Injectable({ providedIn: 'root' })
 export class AnimationService {

@@ -1,23 +1,27 @@
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
-  ComponentFactory,
-  ComponentFactoryResolver,
+  Component,
   ComponentRef,
   ElementRef,
-  OnInit,
   OnDestroy,
+  OnInit,
   ViewChild,
   ViewContainerRef,
-  Component,
 } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Subscription, interval } from 'rxjs';
 import { SubSink } from 'subsink';
-import { CircleComponent } from '../circle/circle.component';
 import { AnimationService } from '../../services/animation.service';
 import { RandomColorService } from '../../services/random-color.service';
-import { WindowDimensionsService } from '../../services/windowDimensionsService';
+import { RandomFeatsService } from '../../services/random-features.service';
+import { WindowDimensionsService } from '../../services/window-dimensions.service';
+import { CircleComponent } from '../circle/circle.component';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, CircleComponent],
   selector: 'app-bubbles',
   templateUrl: './bubbles.component.html',
   styleUrls: ['./bubbles.component.scss'],
@@ -31,7 +35,6 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('greeting') greetingBubble!: ElementRef<HTMLDivElement>;
   @ViewChild('title') title!: ElementRef<HTMLHeadingElement>;
 
-  circleFactory!: ComponentFactory<CircleComponent>;
   circleRefArray: ComponentRef<CircleComponent>[] = [];
 
   createCirclesSub?: Subscription;
@@ -40,16 +43,15 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
   points = 0;
 
   constructor(
-    private resolver: ComponentFactoryResolver,
     private randomColorService: RandomColorService,
     private animationService: AnimationService,
-    private winService: WindowDimensionsService
+    private winService: WindowDimensionsService,
+    private randomLifeService: RandomFeatsService
   ) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.circleFactory = this.resolver.resolveComponentFactory(CircleComponent);
     this.greetingBubbleColor();
     this.separateLetterOfTitle();
   }
@@ -75,7 +77,7 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.title.nativeElement.animate(letterFrames, {
       duration: 3000,
       iterations: Infinity,
-      easing: 'linear',
+      easing: 'ease-in',
     });
   }
 
@@ -97,22 +99,22 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   createCircles() {
-    this.createCirclesSub = interval(200).subscribe(() => {
-      console.log(this.winService.width);
-      const circle = this.container.createComponent(this.circleFactory);
+    this.createCirclesSub = interval(300).subscribe(() => {
+      const circle = this.container.createComponent(CircleComponent);
 
-      const circleLife = Math.random() * 5 * 1000 + 5000;
-      const circleColor = this.randomColorService.getRandomDarkColor();
-      const circleRadius = Math.random() * 300;
-      const circlePosition = {
+      const circleRadius = Math.floor(Math.random() * 300);
+      console.log(
+        '🚀 ~ file: bubbles.component.ts:106 ~ BubblesComponent ~ this.createCirclesSub=interval ~ circleRadius',
+        circleRadius
+      );
+
+      circle.instance.life = this.randomLifeService.randomLife();
+      circle.instance.radius = circleRadius;
+      circle.instance.color = this.randomColorService.getRandomDarkColor();
+      circle.instance.position = {
         x: Math.round(Math.random() * (this.winService.width - circleRadius)),
         y: Math.round(Math.random() * (this.winService.height - circleRadius)),
       };
-
-      circle.instance.color = circleColor;
-      circle.instance.radius = circleRadius;
-      circle.instance.position = circlePosition;
-      circle.instance.life = circleLife;
 
       this.circleRefArray.push(circle);
       const index = this.circleRefArray.length - 1;
