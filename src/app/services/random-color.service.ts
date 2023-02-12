@@ -1,27 +1,23 @@
 import randomColor from 'randomcolor';
-import { Injectable } from '@angular/core';
 import { COLORS } from '../constants/colors';
 
-@Injectable({ providedIn: 'root' })
 export class RandomColorService {
-  private colors = COLORS;
-
-  public getRandomSematicColor() {
-    const length = this.colors.length;
+  public static getRandomSematicColor() {
+    const length = COLORS.length;
     const randomIndex = Math.floor(Math.random() * length);
 
-    return this.colors[randomIndex];
+    return COLORS[randomIndex];
   }
 
-  public getRandomHexColor() {
+  public static getRandomHexColor() {
     return randomColor();
   }
 
-  public getRandomLightColor() {
+  public static getRandomLightColor() {
     return randomColor({ luminosity: 'light' });
   }
 
-  public getRandomDarkColor() {
+  public static getRandomDarkColor() {
     return randomColor({ luminosity: 'dark' });
   }
 }

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { RandomNumbersService } from './random-numbers.service';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class RandomFeatsService {
-  constructor() {}
+  public static randomLife() {
+    const randomLife = RandomNumbersService.getRandomNumber(5000, 10000, 500);
+    return randomLife;
+  }
 
-  public randomLife() {
-    return Math.random() * 5 * 1000 + 5000;
+  public static getRandomDelayOfBubbles() {
+    return RandomNumbersService.getRandomNumber(50, 500, 50);
   }
 }

@@ -1,64 +1,63 @@
 import { Injectable } from '@angular/core';
+import { Envelope } from '../model/envelope.interface';
 import { FrequencyService } from './frequency.service';
 import { WebAudio } from './web-audio.service';
 
 @Injectable()
 export class BubbleSoundService {
-  sound: OscillatorNode;
-  gain: GainNode;
-  compressor: DynamicsCompressorNode;
-  time: number;
+  oscillator: OscillatorNode;
+  noteGain: GainNode;
+
+  envelope: Envelope = {
+    attack: { value: 0.5, time: 0.1 },
+    decay: { value: 0.4, time: 0.2 },
+    sustain: { value: 0.3, time: 0.3 },
+    release: { value: 0, time: 0.5 },
+  };
+
+  soundDuration: number = 0.5;
 
   constructor(private webAudio: WebAudio) {
-    this.sound = this.webAudio.createOscillator();
-    this.gain = this.webAudio.createGain();
-    this.time = this.webAudio.getTime();
-    this.compressor = this.webAudio.createCompressor(this.time);
+    this.oscillator = this.webAudio.createOscillator();
+    this.noteGain = this.webAudio.createNoteGain(this.envelope);
+    this.oscillator.connect(this.noteGain);
   }
 
   configureSound(radius: number, color: string, life: number) {
-    const baseHz = (100 / radius) * 500;
-
-    const tooHighDiscarded = baseHz > 2000 ? baseHz - baseHz / 2 : baseHz;
-
-    console.log('############', { target: tooHighDiscarded }, '############');
-
-    const frequency = FrequencyService.findClosestFrequency(tooHighDiscarded);
-
-    console.log({ frequency });
-
     const currentTime = this.webAudio.getTime();
-    this.sound.frequency.value = frequency;
-    this.configureGain(currentTime, life);
+    const randomBaseHz = (25 / radius) * 500;
+
+    // const frequency = FrequencyService.findClosestFrequency(randomBaseHz);
+    const frequency = FrequencyService.getRandomFrequency();
+
+    this.oscillator.frequency.value = frequency;
+
+    console.log('############', { randomBaseHz, frequency }, '############');
+
     // this.configureCompressor(currentTime);
-
-    this.sound.connect(this.gain);
-    this.sound.start(currentTime);
-    this.sound.stop(currentTime + 0.5);
+    this.oscillator.start(currentTime);
+    this.oscillator.stop(currentTime + this.soundDuration);
   }
 
-  stopSound() {
-    this.sound.stop();
+  public stopSound() {
+    this.noteGain.gain.cancelScheduledValues(this.webAudio.getTime());
+    this.noteGain.gain.setValueAtTime(
+      0,
+      this.webAudio.getTime() + this.envelope.release.time
+    );
+    this.oscillator.stop();
+    this.oscillator.disconnect();
   }
 
-  configureGain(time: number, life: number) {
-    // this.gain.gain.linearRampToValueAtTime(0, time);
-    // this.gain.gain.linearRampToValueAtTime(0.4, time + 0.05);
-    // this.gain.gain.linearRampToValueAtTime(0.2, time + life - 0.1);
-    // this.gain.gain.linearRampToValueAtTime(0, time + life);
-
-    this.gain.gain.linearRampToValueAtTime(0, time);
-    this.gain.gain.linearRampToValueAtTime(0.5, time + 0.1);
-    // this.gain.gain.linearRampToValueAtTime(0.5, time + 0.4);
-    // this.gain.gain.linearRampToValueAtTime(0.2, time + 0.6);
-    this.gain.gain.linearRampToValueAtTime(0, time + 0.6);
+  public disconnectOscillator() {
+    this.oscillator.disconnect();
   }
 
-  configureCompressor(time: number) {
-    this.compressor.threshold.setValueAtTime(-50, time);
-    this.compressor.knee.setValueAtTime(40, time + 0.2);
-    this.compressor.ratio.setValueAtTime(12, time);
-    this.compressor.attack.setValueAtTime(0, time + 0.1);
-    this.compressor.release.setValueAtTime(0.25, time + 0.4);
-  }
+  // configureCompressor(time: number) {
+  //   this.compressor.threshold.setValueAtTime(-50, time);
+  //   this.compressor.knee.setValueAtTime(40, time + 0.2);
+  //   this.compressor.ratio.setValueAtTime(12, time);
+  //   this.compressor.attack.setValueAtTime(0, time + 0.1);
+  //   this.compressor.release.setValueAtTime(0.25, time + 0.4);
+  // }
 }
