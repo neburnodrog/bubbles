@@ -71,7 +71,7 @@ export class BubblesComponent {
       this.createCircle();
     });
 
-    this.createCirclesSub = interval(800).subscribe((index) => {
+    this.createCirclesSub = interval(400).subscribe((index) => {
       const randomDelay = RandomFeatsService.getRandomDelayOfBubbles();
       const timeout = setTimeout(() => {
         this.bubbleEventStreamSubject.next(true);
