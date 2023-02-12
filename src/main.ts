@@ -1,10 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   PreloadAllModules,
   provideRouter,
-  withDebugTracing,
   withPreloading,
 } from '@angular/router';
 import { AppComponent } from './app/app.component';
@@ -18,10 +18,8 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(HttpClientModule),
-    provideRouter(
-      APP_ROUTES,
-      withPreloading(PreloadAllModules),
-      withDebugTracing()
-    ),
+    provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
+    BrowserModule,
+    BrowserAnimationsModule,
   ],
 });
