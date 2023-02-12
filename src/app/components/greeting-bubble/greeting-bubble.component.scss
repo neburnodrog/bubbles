@@ -1,0 +1,14 @@
+.greetingBubble {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rem;
+
+  // ! keep to see if needed
+  // position: absolute;
+  // overflow: hidden;
+}

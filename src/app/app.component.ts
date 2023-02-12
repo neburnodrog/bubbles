@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AnimationService } from './services/animation.service';
+import { RandomColorService } from './services/random-color.service';
 
 @Component({
   imports: [RouterOutlet],
@@ -9,10 +9,7 @@ import { AnimationService } from './services/animation.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private el: ElementRef,
-    private animationService: AnimationService
-  ) {}
+  constructor(private el: ElementRef) {}
 
   ngOnInit() {
     const body = this.el.nativeElement.parentNode;
@@ -20,10 +17,24 @@ export class AppComponent implements OnInit {
   }
 
   animateBackground(body: HTMLBodyElement) {
-    const bodyFrames = this.animationService.getBodyFrames();
+    const bodyFrames = this.getBodyFrames();
     body.animate(bodyFrames, {
       duration: 10000,
       iterations: Infinity,
     });
+  }
+
+  getBodyFrames() {
+    const initialColor = RandomColorService.getRandomLightColor();
+    const backgroundAnimationKeyFrames = [
+      { backgroundColor: initialColor },
+      { backgroundColor: RandomColorService.getRandomLightColor() },
+      { backgroundColor: RandomColorService.getRandomLightColor() },
+      { backgroundColor: RandomColorService.getRandomLightColor() },
+      { backgroundColor: RandomColorService.getRandomLightColor() },
+      { backgroundColor: initialColor },
+    ];
+
+    return backgroundAnimationKeyFrames;
   }
 }

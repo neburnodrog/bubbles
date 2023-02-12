@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Envelope } from '../model/envelope.interface';
 
 @Injectable({ providedIn: 'root' })
 export class WebAudio {
-  private context: AudioContext;
-  private gainNode: GainNode;
+  private context = new window.AudioContext();
+  private _volumeNode = this.context.createGain();
+  private defaultEnv: Envelope = {
+    attack: { value: 1, time: 0 },
+    decay: { value: 1, time: 0 },
+    sustain: { value: 1, time: 0 },
+    release: { value: 0, time: 0 },
+  };
 
   constructor() {
-    this.context = new window.AudioContext();
-    this.gainNode = this.context.createGain();
-    this.configureGain();
+    this._volumeNode.gain.value = 0.4;
+    this._volumeNode.connect(this.context.destination);
   }
 
-  private configureGain() {
-    this.gainNode.gain.value = 0.5;
-    this.gainNode.connect(this.context.destination);
+  get volumeNode() {
+    return this._volumeNode;
   }
 
   public getTime() {
@@ -21,31 +26,49 @@ export class WebAudio {
   }
 
   public createOscillator(options?: OscillatorOptions) {
-    if (!this.context) this.context = new window.AudioContext();
     return this.context.createOscillator();
   }
 
-  createGain() {
-    const gain = this.context.createGain();
-    gain.connect(this.context.destination);
-    return gain;
+  public createGain() {
+    return this.context.createGain();
   }
 
-  startSound(oscillator: OscillatorNode) {
-    oscillator.connect(this.gainNode);
-    oscillator.start(0);
+  public createNoteGain(
+    { attack, decay, sustain, release }: Envelope = this.defaultEnv
+  ) {
+    const time = this.context.currentTime;
+    const noteGain = this.context.createGain();
+
+    // START
+    noteGain.gain.setValueAtTime(0, time);
+
+    // ATTACK
+    noteGain.gain.linearRampToValueAtTime(attack.value, time + attack.time);
+
+    if (decay)
+      noteGain.gain.linearRampToValueAtTime(decay.value, time + decay.time);
+
+    if (sustain)
+      noteGain.gain.linearRampToValueAtTime(sustain.value, time + sustain.time);
+
+    // RELEASE
+    noteGain.gain.linearRampToValueAtTime(release.value, time + release.time);
+
+    // CONNECT ENVELOPE TO VOLUME
+    noteGain.connect(this._volumeNode);
+
+    return noteGain;
   }
 
-  stopSound(oscillator: OscillatorNode) {
-    oscillator.stop(0);
+  /**
+   *
+   * @param value min: 0 - max: 1
+   */
+  public changeVolume(value: number) {
+    this._volumeNode.gain.value = value;
   }
 
-  changeVolume(value: number) {
-    const volume = Number(value) / 100;
-    this.gainNode.gain.value = volume;
-  }
-
-  createCompressor(time: number) {
+  public createCompressor() {
     return this.context.createDynamicsCompressor();
   }
 }

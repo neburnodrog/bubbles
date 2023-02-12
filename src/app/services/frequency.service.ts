@@ -1,4 +1,5 @@
 import { NOTE_FREQUENCIES } from '../constants/notes';
+import { RandomNumbersService } from './random-numbers.service';
 
 export class FrequencyService {
   // static findClosestFrequency(arr: number[], target: number): number {
@@ -62,9 +63,16 @@ export class FrequencyService {
   //   return closerToVal2 ? val2 : val1;
   // };
 
-  static findClosestFrequency(radius: number): number {
-    const index = Math.floor(Math.random() * NOTE_FREQUENCIES.length);
+  static getRandomFrequency(): number {
+    return RandomNumbersService.getRandomNumber(30, 2000, 1);
+  }
 
-    return NOTE_FREQUENCIES[index];
+  static findClosestFrequency(radius: number): number {
+    const randomIndex = RandomNumbersService.getRandomNumber(
+      0,
+      NOTE_FREQUENCIES.length - 1
+    );
+
+    return NOTE_FREQUENCIES[randomIndex];
   }
 }

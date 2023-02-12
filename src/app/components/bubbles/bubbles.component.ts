@@ -1,46 +1,41 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   ComponentRef,
-  ElementRef,
-  OnDestroy,
-  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Subscription, interval } from 'rxjs';
+import { Subject, Subscription, interval } from 'rxjs';
 import { SubSink } from 'subsink';
-import { AnimationService } from '../../services/animation.service';
 import { RandomColorService } from '../../services/random-color.service';
 import { RandomFeatsService } from '../../services/random-features.service';
+import { RandomNumbersService } from '../../services/random-numbers.service';
 import { WindowDimensionsService } from '../../services/window-dimensions.service';
 import { CircleComponent } from '../circle/circle.component';
+import { ColorButtonComponent } from '../color-button/color-button.component';
+import { GreetingBubbleComponent } from '../greeting-bubble/greeting-bubble.component';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatIconModule,
     MatMenuModule,
     CircleComponent,
+    ColorButtonComponent,
+    MatIconModule,
+    GreetingBubbleComponent,
   ],
   selector: 'app-bubbles',
   templateUrl: './bubbles.component.html',
   styleUrls: ['./bubbles.component.scss'],
 })
-export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class BubblesComponent {
   private subs = new SubSink();
 
   @ViewChild('circleContainer', { read: ViewContainerRef })
   container!: ViewContainerRef;
-
-  @ViewChild('greeting') greetingBubble!: ElementRef<HTMLDivElement>;
-  @ViewChild('title') title!: ElementRef<HTMLHeadingElement>;
 
   circleRefArray: ComponentRef<CircleComponent>[] = [];
 
@@ -49,101 +44,70 @@ export class BubblesComponent implements OnInit, OnDestroy, AfterViewInit {
   started = false;
   points = 0;
 
-  constructor(
-    private randomColorService: RandomColorService,
-    private animationService: AnimationService,
-    private winService: WindowDimensionsService,
-    private randomLifeService: RandomFeatsService
-  ) {}
+  private bubbleEventStreamSubject = new Subject<true>();
+  private bubbleEventStream$ = this.bubbleEventStreamSubject.asObservable();
 
-  ngOnInit() {}
+  private timeouts: number[] = [];
 
-  ngAfterViewInit() {
-    this.greetingBubbleColor();
-    this.separateLetterOfTitle();
-  }
+  constructor(private winService: WindowDimensionsService) {}
 
-  greetingBubbleColor() {
-    const initialPosition = {
-      x: this.winService.width / 3.5,
-      y: this.winService.height / 5,
-    };
-
-    const titleAnimationKeyFrames =
-      this.animationService.getTitleDivAnimationFrames(initialPosition);
-
-    this.greetingBubble.nativeElement.animate(titleAnimationKeyFrames, {
-      duration: 30000,
-      iterations: Infinity,
-      easing: 'ease-in',
-    });
-  }
-
-  separateLetterOfTitle() {
-    const letterFrames = this.animationService.getTitleLetterSeparate();
-    this.title.nativeElement.animate(letterFrames, {
-      duration: 3000,
-      iterations: Infinity,
-      easing: 'ease-in',
-    });
-  }
-
-  start() {
+  onStart() {
     this.started = true;
     this.subs.unsubscribe();
     this.container.clear();
     this.circleRefArray = [];
-    this.createCircles();
+    this.startCircleCreationLoop();
   }
 
   stop() {
     this.started = false;
+    this.timeouts.forEach((timeout) => clearTimeout(timeout));
+    this.timeouts = [];
     this.createCirclesSub?.unsubscribe();
-    window.setTimeout(() => {
-      this.greetingBubbleColor();
-      this.separateLetterOfTitle();
+  }
+
+  startCircleCreationLoop() {
+    this.subs.sink = this.bubbleEventStream$.subscribe(() => {
+      this.createCircle();
+    });
+
+    this.createCirclesSub = interval(800).subscribe((index) => {
+      const randomDelay = RandomFeatsService.getRandomDelayOfBubbles();
+      const timeout = setTimeout(() => {
+        this.bubbleEventStreamSubject.next(true);
+      }, randomDelay);
+      this.timeouts.push(timeout);
     });
   }
 
-  createCircles() {
-    this.createCirclesSub = interval(500).subscribe(() => {
-      const circle = this.container.createComponent(CircleComponent);
+  createCircle() {
+    const circle = this.container.createComponent(CircleComponent);
 
-      const circleRadius = Math.floor(Math.random() * 300);
+    const circleRadius = RandomNumbersService.getRandomNumber(50, 350, 1);
 
-      circle.instance.life = this.randomLifeService.randomLife();
-      circle.instance.radius = circleRadius;
-      circle.instance.color = this.randomColorService.getRandomDarkColor();
-      circle.instance.position = {
-        x: Math.round(Math.random() * (this.winService.width - circleRadius)),
-        y: Math.round(Math.random() * (this.winService.height - circleRadius)),
-      };
+    circle.instance.life = RandomFeatsService.randomLife();
+    circle.instance.radius = circleRadius;
+    circle.instance.color = RandomColorService.getRandomDarkColor();
+    circle.instance.position = {
+      x: Math.round(Math.random() * (this.winService.width - circleRadius)),
+      y: Math.round(Math.random() * (this.winService.height - circleRadius)),
+    };
 
-      this.circleRefArray.push(circle);
-      const index = this.circleRefArray.length - 1;
+    this.circleRefArray.push(circle);
+    const index = this.circleRefArray.length - 1;
 
-      this.subs.sink = circle.instance.clicked.subscribe((clicked) => {
-        if (clicked) this.points += 100;
-      });
-
-      this.subs.sink = circle.instance.isAlive.subscribe((isAlive) => {
-        if (!isAlive) {
-          circle.destroy();
-          this.circleRefArray.splice(index, 1);
-        }
-      });
+    circle.instance.clicked.subscribe((clicked) => {
+      if (clicked) this.points += 100;
     });
-  }
 
-  onInfoClick() {
-    confirm(
-      'Just click on the bubbles to pop them and see how you score grows.'
-    );
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-    this.createCirclesSub?.unsubscribe();
-    this.circleRefArray.forEach((instance) => instance.destroy());
+    circle.instance.isAlive.subscribe((isAlive) => {
+      if (!isAlive) {
+        const findIndex = this.circleRefArray.findIndex(
+          (ref) => ref === circle
+        );
+        this.circleRefArray.splice(findIndex, 1);
+        circle.destroy();
+      }
+    });
   }
 }

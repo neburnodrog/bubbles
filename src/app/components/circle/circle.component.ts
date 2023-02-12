@@ -10,9 +10,10 @@ import {
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { BubbleSoundService } from 'src/app/services/bubble-sound.service';
-import { SubSink } from 'subsink';
 import { CircleStyle } from '../../model/circle.interface';
+import { RandomColorService } from '../../services/random-color.service';
 import { SamplesService } from '../../services/samples.service';
+import { WindowDimensionsService } from '../../services/window-dimensions.service';
 
 @Component({
   standalone: true,
@@ -45,11 +46,9 @@ export class CircleComponent implements OnInit {
     transition: '',
   });
 
-  private subs = new SubSink();
-
   constructor(
     private bubbleSoundService: BubbleSoundService,
-    private sampleService: SamplesService
+    private winService: WindowDimensionsService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +72,14 @@ export class CircleComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    const animation = this.getBubbleAnimation(this.position);
+
+    this.circle.nativeElement.animate(animation, {
+      duration: 30000,
+      iterations: Infinity,
+      easing: 'ease-in',
+    });
+
     const disappear = [
       {
         transform: 'scale(1)',
@@ -90,14 +97,60 @@ export class CircleComponent implements OnInit {
     });
   }
 
+  getBubbleAnimation(position: any) {
+    const initialColor = RandomColorService.getRandomLightColor();
+
+    let titleFrames: any = [
+      {
+        transform: this.getTranslation(position),
+        backgroundColor: initialColor,
+      },
+    ];
+
+    for (let i = 0; i < 10; i++) {
+      titleFrames = titleFrames.concat([
+        {
+          transform: this.getTranslation(),
+          backgroundColor: RandomColorService.getRandomLightColor(),
+        },
+      ]);
+    }
+
+    return titleFrames;
+  }
+
+  getTranslation(initialPosition?: { x: number; y: number }) {
+    if (initialPosition) {
+      return `
+        translate3D(
+          ${initialPosition.x}px,
+          ${initialPosition.y}px,
+          0
+        )
+      `;
+    }
+
+    return `translate3D(
+      ${
+        Math.round((Math.random() * this.winService.width) / 8) +
+        (4 / 16) * this.winService.width
+      }px,
+      ${
+        Math.round((Math.random() * this.winService.height) / 8) +
+        (4 / 16) * this.winService.height
+      }px,
+      0
+    )`;
+  }
+
   onClick() {
     this.clicked.emit(true);
-    this.sampleService.playSound();
+    SamplesService.playSound();
     this.bubbleSoundService.stopSound();
     this.isAlive.next(false);
   }
 
   ngOnDestroy() {
-    window.clearTimeout(this.timeOut);
+    this.bubbleSoundService.disconnectOscillator();
   }
 }

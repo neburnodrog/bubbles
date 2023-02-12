@@ -1,21 +1,11 @@
-<button *ngIf="started" mat-flat-button color="warn" (click)="stop()">
-  Stop
-</button>
+<mat-icon *ngIf="!started" [matMenuTriggerFor]="menu">menu</mat-icon>
+<mat-icon *ngIf="started" (click)="stop()" class="close">cancel</mat-icon>
 
-<mat-icon [matMenuTriggerFor]="menu">menu</mat-icon>
 <mat-menu #menu="matMenu">
   <button mat-menu-item>Item 1</button>
   <button mat-menu-item>Item 2</button>
 </mat-menu>
 
-<div *ngIf="!started" #greeting class="title">
-  <h1 #title>Burbujas</h1>
-  <h3>
-    Press start to play the game
-    <mat-icon (click)="onInfoClick()">info</mat-icon>
-  </h3>
+<app-greeting-bubble *ngIf="!started" (start)="onStart()"></app-greeting-bubble>
 
-  <button mat-flat-button color="primary" (click)="start()">Start</button>
-</div>
 <div #circleContainer></div>
-<h4 *ngIf="started" class="score">Score: {{ points }}</h4>
