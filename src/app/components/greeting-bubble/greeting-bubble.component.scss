@@ -1,14 +1,19 @@
-.greetingBubble {
-  width: 150px;
-  height: 150px;
-  border-radius: 100%;
+:host {
+  .greetingBubble {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12rem;
 
-  // ! keep to see if needed
-  // position: absolute;
-  // overflow: hidden;
+    margin-top: rem;
+
+    // ! keep to see if needed
+    // position: absolute;
+    // overflow: hidden;
+  }
+
 }

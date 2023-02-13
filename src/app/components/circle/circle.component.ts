@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { BubbleSoundService } from 'src/app/services/bubble-sound.service';
 import { CircleStyle } from '../../model/circle.interface';
 import { RandomColorService } from '../../services/random-color.service';
-import { SamplesService } from '../../services/samples.service';
+import { SampleService } from '../../services/samples.service';
 import { WindowDimensionsService } from '../../services/window-dimensions.service';
 
 @Component({
@@ -48,7 +48,8 @@ export class CircleComponent implements OnInit {
 
   constructor(
     private bubbleSoundService: BubbleSoundService,
-    private winService: WindowDimensionsService
+    private winService: WindowDimensionsService,
+    private sampleService: SampleService
   ) {}
 
   ngOnInit(): void {
@@ -145,7 +146,7 @@ export class CircleComponent implements OnInit {
 
   onClick() {
     this.clicked.emit(true);
-    SamplesService.playSound();
+    this.sampleService.playSound();
     this.bubbleSoundService.stopSound();
     this.isAlive.next(false);
   }

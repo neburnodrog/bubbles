@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { RandomColorService } from '../../services/random-color.service';
+import { SampleService } from '../../services/samples.service';
 import { WindowDimensionsService } from '../../services/window-dimensions.service';
 import { ColorButtonComponent } from '../color-button/color-button.component';
 import { GreetingTitleComponent } from '../greeting-title/greeting-title.component';
@@ -28,7 +29,10 @@ export class GreetingBubbleComponent {
 
   @Output() start: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private winService: WindowDimensionsService) {}
+  constructor(
+    private winService: WindowDimensionsService,
+    private sampleService: SampleService
+  ) {}
 
   ngAfterViewInit() {
     this.animateStartingBubble();
@@ -36,6 +40,7 @@ export class GreetingBubbleComponent {
 
   onClick() {
     this.start.emit(true);
+    this.sampleService.preloadAudioFiles();
   }
 
   animateStartingBubble() {

@@ -1,4 +1,11 @@
-button {
-  padding: .6rem 2.5rem;
-  border-radius: .5;
+:host {
+  .start-button {
+    margin-top: 2rem;
+    padding: 1.8rem 2.5rem;
+    border-radius: 20%;
+    color: black;
+    font-family: monospace;
+    font-weight: 600;
+    letter-spacing: 1.7px;
+  }
 }
