@@ -12,6 +12,7 @@ import { SubSink } from 'subsink';
 import { RandomColorService } from '../../services/random-color.service';
 import { RandomFeatsService } from '../../services/random-features.service';
 import { RandomNumbersService } from '../../services/random-numbers.service';
+import { SampleService } from '../../services/samples.service';
 import { WindowDimensionsService } from '../../services/window-dimensions.service';
 import { CircleComponent } from '../circle/circle.component';
 import { ColorButtonComponent } from '../color-button/color-button.component';
@@ -49,7 +50,12 @@ export class BubblesComponent {
 
   private timeouts: number[] = [];
 
-  constructor(private winService: WindowDimensionsService) {}
+  constructor(
+    private winService: WindowDimensionsService,
+    private sampleService: SampleService
+  ) {
+    this.sampleService.preloadAudioFiles();
+  }
 
   onStart() {
     this.started = true;

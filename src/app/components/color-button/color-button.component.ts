@@ -9,19 +9,21 @@ import { RandomColorService } from '../../services/random-color.service';
   styleUrls: ['./color-button.component.scss'],
 })
 export class ColorButtonComponent {
-  @ViewChild('button') private button!: ElementRef<HTMLButtonElement>;
+  @ViewChild('startButton') startButton!: ElementRef<HTMLButtonElement>;
 
   constructor() {}
 
   ngAfterViewInit() {
-    console.log(this.button);
     this.animateButton();
   }
 
   animateButton() {
     const buttonFrames = this.getButtonAnimationFrames();
-    this.button.nativeElement.animate(buttonFrames, {
-      duration: 200,
+
+    console.log({ button: this.startButton, buttonFrames });
+
+    this.startButton.nativeElement.animate(buttonFrames, {
+      duration: 2000,
       iterations: Infinity,
       easing: 'linear',
     });
@@ -32,10 +34,6 @@ export class ColorButtonComponent {
 
     const buttonFrames = [
       { backgroundColor: initialColor },
-      { backgroundColor: RandomColorService.getRandomDarkColor() },
-      { backgroundColor: RandomColorService.getRandomDarkColor() },
-      { backgroundColor: RandomColorService.getRandomDarkColor() },
-      { backgroundColor: RandomColorService.getRandomDarkColor() },
       { backgroundColor: RandomColorService.getRandomDarkColor() },
       { backgroundColor: initialColor },
     ];

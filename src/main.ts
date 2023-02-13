@@ -19,6 +19,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(HttpClientModule),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)),
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
   ],

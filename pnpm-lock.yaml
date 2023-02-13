@@ -14,22 +14,22 @@ specifiers:
   '@angular/platform-browser': ^15.1.4
   '@angular/platform-browser-dynamic': ^15.1.4
   '@angular/router': ^15.1.4
-  '@types/jasmine': ~3.8.0
-  '@types/randomcolor': ^0.5.6
-  express: ^4.17.1
+  '@types/jasmine': ~3.8.2
+  '@types/randomcolor': ^0.5.7
+  express: ^4.18.2
   jasmine-core: ~3.8.0
-  karma: ~6.3.0
-  karma-chrome-launcher: ~3.1.0
+  karma: ~6.3.20
+  karma-chrome-launcher: ~3.1.1
   karma-coverage: ~2.0.3
-  karma-jasmine: ~4.0.0
+  karma-jasmine: ~4.0.2
   karma-jasmine-html-reporter: ~1.7.0
   path: ^0.12.7
   randomcolor: ^0.6.2
-  rxjs: ~6.6.0
+  rxjs: ~6.6.7
   subsink: ^1.0.2
-  tslib: ^2.3.0
-  typescript: ^4.8.4
-  zone.js: ~0.11.4
+  tslib: ^2.5.0
+  typescript: ^4.9.5
+  zone.js: ~0.11.8
 
 dependencies:
   '@angular/animations': 15.1.4_@angular+core@15.1.4
@@ -1655,7 +1655,7 @@ packages:
       babel-plugin-polyfill-corejs2: 0.3.3_@babel+core@7.20.12
       babel-plugin-polyfill-corejs3: 0.6.0_@babel+core@7.20.12
       babel-plugin-polyfill-regenerator: 0.4.1_@babel+core@7.20.12
-      core-js-compat: 3.27.2
+      core-js-compat: 3.28.0
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
@@ -3276,7 +3276,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-define-polyfill-provider': 0.3.3_@babel+core@7.20.12
-      core-js-compat: 3.27.2
+      core-js-compat: 3.28.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3387,6 +3387,17 @@ packages:
       electron-to-chromium: 1.4.295
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.4
+    dev: true
+
+  /browserslist/4.21.5:
+    resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001451
+      electron-to-chromium: 1.4.295
+      node-releases: 2.0.10
+      update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
 
   /buffer-from/1.1.2:
@@ -3713,10 +3724,10 @@ packages:
       webpack: 5.75.0_esbuild@0.16.17
     dev: true
 
-  /core-js-compat/3.27.2:
-    resolution: {integrity: sha512-welaYuF7ZtbYKGrIy7y3eb40d37rG1FvzEOfe7hSLd2iD6duMDqUhRfSvCGyC46HhR6Y8JXXdZ2lnRUMkPBpvg==}
+  /core-js-compat/3.28.0:
+    resolution: {integrity: sha512-myzPgE7QodMg4nnd3K1TDoES/nADRStM8Gpz0D6nhkwbmwEnE0ZGJgoWsvQ722FR8D7xS0n0LV556RcEicjTyg==}
     dependencies:
-      browserslist: 4.21.4
+      browserslist: 4.21.5
     dev: true
 
   /core-util-is/1.0.3:
@@ -4676,7 +4687,7 @@ packages:
     resolution: {integrity: sha512-/c8MxUAqpRccq+LyDOecwF+9KqajueJHh8fz7g3YqjMZt+NSfJzx05zrKiXwa2sKwFCzaiZ5qUVfRj0pmxixEA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      minimatch: 6.1.6
+      minimatch: 6.2.0
     dev: true
 
   /ignore/5.2.4:
@@ -5385,8 +5396,8 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
-  /minimatch/6.1.6:
-    resolution: {integrity: sha512-6bR3UIeh/DF8+p6A9Spyuy67ShOq42rOkHWi7eUe3Ua99Zo5lZfGC6lJJWkeoK4k9jQFT3Pl7czhTXimG2XheA==}
+  /minimatch/6.2.0:
+    resolution: {integrity: sha512-sauLxniAmvnhhRjFwPNnJKaPFYyddAgbYdeUpHULtCT/GhzdCx/MDNy+Y40lBxTQUrMzDE8e0S43Z5uqfO0REg==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
@@ -6993,6 +7004,17 @@ packages:
       picocolors: 1.0.0
     dev: true
 
+  /update-browserslist-db/1.0.10_browserslist@4.21.5:
+    resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+    dependencies:
+      browserslist: 4.21.5
+      escalade: 3.1.1
+      picocolors: 1.0.0
+    dev: true
+
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
@@ -7129,7 +7151,7 @@ packages:
       spdy: 4.0.2
       webpack: 5.75.0_esbuild@0.16.17
       webpack-dev-middleware: 5.3.3_webpack@5.75.0
-      ws: 8.12.0
+      ws: 8.12.1
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -7277,8 +7299,8 @@ packages:
         optional: true
     dev: true
 
-  /ws/8.12.0:
-    resolution: {integrity: sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==}
+  /ws/8.12.1:
+    resolution: {integrity: sha512-1qo+M9Ba+xNhPB+YTWUlK6M17brTut5EXbcBaMRN5pH5dFrXz7lzz1ChFSUq3bOUl8yEvSenhHmYUNJxFzdJew==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
