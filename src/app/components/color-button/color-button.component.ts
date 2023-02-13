@@ -30,11 +30,11 @@ export class ColorButtonComponent {
   }
 
   getButtonAnimationFrames() {
-    const initialColor = RandomColorService.getRandomDarkColor();
+    const initialColor = RandomColorService.getRandomLightColor();
 
     const buttonFrames = [
       { backgroundColor: initialColor },
-      { backgroundColor: RandomColorService.getRandomDarkColor() },
+      { backgroundColor: RandomColorService.getRandomLightColor() },
       { backgroundColor: initialColor },
     ];
 
