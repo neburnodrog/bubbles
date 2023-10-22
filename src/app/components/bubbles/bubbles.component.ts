@@ -31,6 +31,7 @@ import { GreetingBubbleComponent } from '../greeting-bubble/greeting-bubble.comp
   selector: 'app-bubbles',
   templateUrl: './bubbles.component.html',
   styleUrls: ['./bubbles.component.scss'],
+  animations: []
 })
 export class BubblesComponent {
   private subs = new SubSink();

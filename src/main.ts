@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import {
   PreloadAllModules,
   provideRouter,
@@ -22,5 +22,6 @@ bootstrapApplication(AppComponent, {
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
+    provideAnimations()
   ],
 });

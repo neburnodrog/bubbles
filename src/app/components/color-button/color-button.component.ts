@@ -20,8 +20,6 @@ export class ColorButtonComponent {
   animateButton() {
     const buttonFrames = this.getButtonAnimationFrames();
 
-    console.log({ button: this.startButton, buttonFrames });
-
     this.startButton.nativeElement.animate(buttonFrames, {
       duration: 2000,
       iterations: Infinity,
